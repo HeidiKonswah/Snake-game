@@ -65,20 +65,23 @@ $(document).ready(function(){
     else if(dirc == "down") headY++;
 
 
-    var tail = snake_arr.pop();
-    tail.x = headX;
-    tail.y = headY;
-    snake_arr.unshift(tail);
+
 
     if(headX == -1 || headX == w/px || headY == -1|| headY == h/px){
       reset();
       return;
     }
     if(snake_arr[0].x == food.x && snake_arr[0].y == food.y){
-      console.log("ate it!");
       new_food();
       score++;
+      var tail = {x:snake_arr[0].x, y:snake_arr[0].y };
+    } else {
+      var tail = snake_arr.pop();
+      tail.x = headX;
+      tail.y = headY;
     }
+
+    snake_arr.unshift(tail);
 
     for(var i=0; i<snake_arr.length;i++){
       var cell = snake_arr[i];

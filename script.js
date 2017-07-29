@@ -15,17 +15,28 @@ $(document).ready(function(){
   var headX, headY;
   var food;
   var score;
-
+  var p = false;
+  
+  function pause(){
+    if (p){
+      p = false;
+    }else{
+      p = true;
+    }
+    console.log("p"+p);
+    return p;
+  }
+ 
   //and there we go ...
   //create the array that holds the snake
   function reset(){
     dirc = "right";
-    score =0;
+    score = 0;
+    p = false;
     new_snake();
     new_food();
     if(typeof game != "undefined") clearInterval(game);
     game = setInterval(paint,120);
-
   }
 
   function new_snake(){
@@ -52,6 +63,8 @@ $(document).ready(function(){
 
   //draw the snake array
   function paint(){
+    if(p) return;
+    
     ctx.fillStyle = "black";
     ctx.fillRect(0,0,w,h);
 
@@ -68,9 +81,15 @@ $(document).ready(function(){
 
 
     if(headX == -1 || headX == w/px || headY == -1|| headY == h/px){
-      reset();
+      ctx.font= "26pt impact";
+			ctx.textAlign = "center";
+			ctx.fillStyle = "white";
+			ctx.lineWidth = "3";
+      ctx.fillText("OOPS!",(w/2)-10,(h/2)-10 );
+      window.setTimeout(reset,500);
       return;
     }
+ 
     if(snake_arr[0].x == food.x && snake_arr[0].y == food.y){
       new_food();
       score++;
@@ -89,7 +108,10 @@ $(document).ready(function(){
     }
     paint_cell(food.x,food.y);
     ctx.fillStyle = "white";
-    ctx.fillText("score: "+score,10,h-10);
+    ctx.font= "10pt impact";
+		ctx.textAlign = "left";
+		ctx.fillStyle = "white";
+    ctx.fillText("Score : "+score,10,h-10);
   }
 
   $(document).keydown(function(e){
@@ -98,6 +120,10 @@ $(document).ready(function(){
     else if (key == 39 && dirc != "left") dirc ="right";
     else if (key == 38 && dirc != "down") dirc ="up";
     else if (key == 37 && dirc != "right") dirc ="left";
+    else if (key == 32){
+       pause();
+       console.log(p);
+    }
     console.log("key"+key+" x,y: "+headX+","+headY);
   });
 
